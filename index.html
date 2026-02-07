@@ -144,6 +144,8 @@ footer a {
 </div>
 
 <script>
+  const AI_NAME = "Honey";
+
 const responses = [
   "You didn’t rush that sentence. That tells me it matters more than you’re admitting.",
   "You explained it calmly, but the feeling underneath doesn’t sound calm.",
@@ -179,7 +181,7 @@ function post() {
 
   setTimeout(() => {
     const r = responses[Math.floor(Math.random() * responses.length)];
-    ai.textContent = "Circle: " + r;
+  ai.textContent = AI_NAME + ": " + r;
   }, 900);
 }
 </script>
