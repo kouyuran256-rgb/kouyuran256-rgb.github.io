@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Circle — A Calm Anonymous Community</title>
+  <title>Circle — Public Forum Demo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="A calm, interest-based anonymous community demo." />
+  <meta name="description" content="A public forum demo for anonymous discussion." />
 
   <style>
     body {
@@ -12,13 +12,12 @@
       background: #f9fafb;
       color: #111827;
       margin: 0;
-      padding: 0;
     }
 
     .container {
-      max-width: 720px;
+      max-width: 760px;
       margin: 0 auto;
-      padding: 48px 16px;
+      padding: 40px 16px;
     }
 
     h1 {
@@ -32,11 +31,30 @@
     }
 
     .card {
-      background: #ffffff;
+      background: white;
       border-radius: 16px;
       padding: 20px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.04);
       margin-bottom: 24px;
+    }
+
+    .post {
+      border-bottom: 1px solid #e5e7eb;
+      padding: 16px 0;
+    }
+
+    .post:last-child {
+      border-bottom: none;
+    }
+
+    .post-title {
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .post-body {
+      color: #374151;
+      font-size: 15px;
     }
 
     textarea {
@@ -47,7 +65,6 @@
       font-size: 15px;
       resize: vertical;
       min-height: 80px;
-      box-sizing: border-box;
     }
 
     button {
@@ -58,11 +75,8 @@
       border-radius: 999px;
       padding: 10px 20px;
       font-size: 14px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #1d4ed8;
+      cursor: not-allowed;
+      opacity: 0.6;
     }
 
     .note {
@@ -90,16 +104,41 @@
   <div class="container">
     <h1>Circle</h1>
     <p class="subtitle">
-      A calm space for anonymous thoughts and interest-based sharing.
+      A calm public forum for anonymous, interest-based discussion.
     </p>
 
     <div class="card">
-      <strong>Anonymous Demo</strong>
+      <h2>Public Board</h2>
+
+      <div class="post">
+        <div class="post-title">What helps you stay calm lately?</div>
+        <div class="post-body">
+          I've been walking without my phone in the evenings. It helps more than I expected.
+        </div>
+      </div>
+
+      <div class="post">
+        <div class="post-title">Anyone learning something new?</div>
+        <div class="post-body">
+          I'm slowly learning how to cook simple meals instead of ordering food.
+        </div>
+      </div>
+
+      <div class="post">
+        <div class="post-title">Thought of the day</div>
+        <div class="post-body">
+          Not every day needs to be productive to be meaningful.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <strong>Post to the board (Demo)</strong>
       <p class="note">
-        This is a local demo. Messages are not saved or shared.
+        This is a demonstration. Messages are not submitted or shared.
       </p>
 
-      <textarea placeholder="Share something calmly..."></textarea>
+      <textarea placeholder="Write something thoughtful..."></textarea>
       <button disabled>Post</button>
 
       <p class="note">
@@ -107,17 +146,16 @@
       </p>
     </div>
 
-<footer>
-  <p>
-    This website is NOT a dating service and does NOT provide matchmaking.
-  </p>
-  <p>
-    <a href="privacy.html">Privacy</a> ·
-    <a href="rules.html">Community Rules</a>
-  </p>
-  © Circle
-</footer>
-
+    <footer>
+      <p>
+        This website is NOT a dating service and does NOT provide matchmaking.
+      </p>
+      <p>
+        <a href="privacy.html">Privacy</a> ·
+        <a href="rules.html">Community Rules</a>
+      </p>
+      © Circle
+    </footer>
   </div>
 </body>
 </html>
