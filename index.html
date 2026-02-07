@@ -2,75 +2,121 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Circle — Open Community</title>
+  <title>Circle — A Calm Anonymous Community</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Interest-based anonymous community." />
+  <meta name="description" content="A calm, interest-based anonymous community demo." />
 
   <style>
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      max-width: 720px;
-      margin: 40px auto;
-      padding: 0 16px;
-      line-height: 1.6;
-      background: #f7f8fa;
-      color: #0f1115;
+      background: #f9fafb;
+      color: #111827;
+      margin: 0;
+      padding: 0;
     }
-    a { color: #2563eb; text-decoration: none; }
-    footer { margin-top: 40px; font-size: 14px; color: #6b7280; }
-  </style>    
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 48px 16px;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #6b7280;
+      margin-bottom: 32px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+      margin-bottom: 24px;
+    }
+
+    textarea {
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 15px;
+      resize: vertical;
+      min-height: 80px;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 12px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 20px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    .note {
+      font-size: 14px;
+      color: #6b7280;
+      margin-top: 12px;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 14px;
+      color: #9ca3af;
+      margin-top: 48px;
+    }
+
+    footer a {
+      color: #6b7280;
+      text-decoration: none;
+      margin: 0 8px;
+    }
+  </style>
 </head>
 
 <body>
-  <h1>Circle</h1>
+  <div class="container">
+    <h1>Circle</h1>
+    <p class="subtitle">
+      A calm space for anonymous thoughts and interest-based sharing.
+    </p>
 
-  <p>
-    Circle is a small community for interest-based discussion and anonymous sharing.
-  </p>
+    <div class="card">
+      <strong>Anonymous Demo</strong>
+      <p class="note">
+        This is a local demo. Messages are not saved or shared.
+      </p>
 
-  <p>
-    This website is NOT a dating service and does NOT provide matchmaking.
-  </p>
+      <textarea placeholder="Share something calmly..."></textarea>
+      <button disabled>Post</button>
 
-  <p>
-    <a href="rules.html">Community Rules</a>
-  </p>
-<hr>
+      <p class="note">
+        Posting illegal content, adult material, scams, or harassment is prohibited.
+      </p>
+    </div>
 
-<h2>Anonymous Demo</h2>
-
-<p style="color:#6b7280">
-This is a local demo. Messages are not saved or shared.
-</p>
-
-<textarea id="postInput" rows="4" placeholder="Share something anonymously..."></textarea>
-
-<br><br>
-
-<button onclick="addPost()">Post</button>
-
-<div id="posts"></div>
-
-  <footer>
-    © Circle
-  </footer>
-  <script>
-  function addPost() {
-    const input = document.getElementById("postInput");
-    const posts = document.getElementById("posts");
-
-    const text = input.value.trim();
-    if (!text) return;
-
-    const item = document.createElement("div");
-    item.style.borderTop = "1px solid #e5e7eb";
-    item.style.padding = "12px 0";
-    item.textContent = text;
-
-    posts.prepend(item);
-    input.value = "";
-  }
-</script>
-
+    <footer>
+      <p>
+        This website is NOT a dating service and does NOT provide matchmaking.
+      </p>
+      <p>
+        <a href="rules.html">Community Rules</a>
+      </p>
+      © Circle
+    </footer>
+  </div>
 </body>
 </html>
+Upgrade UI to warm community style
