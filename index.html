@@ -1,161 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Circle — Public Forum Demo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="A public forum demo for anonymous discussion." />
+<meta charset="UTF-8">
+<title>Circle — Calm Anonymous Forum</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A calm anonymous forum with reflective AI responses.">
 
-  <style>
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #f9fafb;
-      color: #111827;
-      margin: 0;
-    }
+<style>
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f9fafb;
+  color: #111827;
+  margin: 0;
+}
 
-    .container {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 40px 16px;
-    }
+.container {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 40px 16px;
+}
 
-    h1 {
-      font-size: 32px;
-      margin-bottom: 8px;
-    }
+h1 {
+  font-size: 32px;
+  margin-bottom: 6px;
+}
 
-    .subtitle {
-      color: #6b7280;
-      margin-bottom: 32px;
-    }
+.subtitle {
+  color: #6b7280;
+  margin-bottom: 32px;
+}
 
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.04);
-      margin-bottom: 24px;
-    }
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+  margin-bottom: 24px;
+}
 
-    .post {
-      border-bottom: 1px solid #e5e7eb;
-      padding: 16px 0;
-    }
+.post {
+  padding: 16px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
 
-    .post:last-child {
-      border-bottom: none;
-    }
+.post:last-child {
+  border-bottom: none;
+}
 
-    .post-title {
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
+.post-body {
+  font-size: 15px;
+  color: #374151;
+}
 
-    .post-body {
-      color: #374151;
-      font-size: 15px;
-    }
+.ai {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #6b7280;
+  font-style: italic;
+}
 
-    textarea {
-      width: 100%;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 12px;
-      font-size: 15px;
-      resize: vertical;
-      min-height: 80px;
-    }
+textarea {
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 15px;
+  resize: vertical;
+  min-height: 80px;
+}
 
-    button {
-      margin-top: 12px;
-      background: #2563eb;
-      color: white;
-      border: none;
-      border-radius: 999px;
-      padding: 10px 20px;
-      font-size: 14px;
-      cursor: not-allowed;
-      opacity: 0.6;
-    }
+button {
+  margin-top: 12px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+}
 
-    .note {
-      font-size: 14px;
-      color: #6b7280;
-      margin-top: 12px;
-    }
+.note {
+  font-size: 14px;
+  color: #6b7280;
+  margin-top: 12px;
+}
 
-    footer {
-      text-align: center;
-      font-size: 14px;
-      color: #9ca3af;
-      margin-top: 48px;
-    }
+footer {
+  text-align: center;
+  font-size: 14px;
+  color: #9ca3af;
+  margin-top: 48px;
+}
 
-    footer a {
-      color: #6b7280;
-      text-decoration: none;
-      margin: 0 8px;
-    }
-  </style>
+footer a {
+  color: #6b7280;
+  text-decoration: none;
+  margin: 0 8px;
+}
+</style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>Circle</h1>
-    <p class="subtitle">
-      A calm public forum for anonymous, interest-based discussion.
+<div class="container">
+  <h1>Circle</h1>
+  <p class="subtitle">
+    A calm public forum with reflective AI presence.
+  </p>
+
+  <div class="card" id="board">
+    <div class="post">
+      <div class="post-body">
+        I keep thinking I should be doing more with my life.
+      </div>
+      <div class="ai">
+        Circle: You said “should” very softly. That usually means you’re already tired.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <strong>Post something</strong>
+    <p class="note">
+      This is a local demo. Posts are not stored. AI responses are reflective, not advice.
     </p>
 
-    <div class="card">
-      <h2>Public Board</h2>
+    <textarea id="input" placeholder="Say something you usually keep to yourself..."></textarea>
+    <button onclick="post()">Post</button>
 
-      <div class="post">
-        <div class="post-title">What helps you stay calm lately?</div>
-        <div class="post-body">
-          I've been walking without my phone in the evenings. It helps more than I expected.
-        </div>
-      </div>
-
-      <div class="post">
-        <div class="post-title">Anyone learning something new?</div>
-        <div class="post-body">
-          I'm slowly learning how to cook simple meals instead of ordering food.
-        </div>
-      </div>
-
-      <div class="post">
-        <div class="post-title">Thought of the day</div>
-        <div class="post-body">
-          Not every day needs to be productive to be meaningful.
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <strong>Post to the board (Demo)</strong>
-      <p class="note">
-        This is a demonstration. Messages are not submitted or shared.
-      </p>
-
-      <textarea placeholder="Write something thoughtful..."></textarea>
-      <button disabled>Post</button>
-
-      <p class="note">
-        Posting illegal content, adult material, scams, or harassment is prohibited.
-      </p>
-    </div>
-
-    <footer>
-      <p>
-        This website is NOT a dating service and does NOT provide matchmaking.
-      </p>
-      <p>
-        <a href="privacy.html">Privacy</a> ·
-        <a href="rules.html">Community Rules</a>
-      </p>
-      © Circle
-    </footer>
+    <p class="note">
+      Illegal content, harassment, scams, or adult material are prohibited.
+    </p>
   </div>
+
+  <footer>
+    <p>This website is NOT a dating service and does NOT provide matchmaking.</p>
+    <p>
+      <a href="privacy.html">Privacy</a> ·
+      <a href="rules.html">Community Rules</a>
+    </p>
+    © Circle
+  </footer>
+</div>
+
+<script>
+const responses = [
+  "You didn’t rush that sentence. That tells me it matters more than you’re admitting.",
+  "You explained it calmly, but the feeling underneath doesn’t sound calm.",
+  "Most people would have stopped typing earlier. You didn’t.",
+  "You’re not looking for an answer. You’re checking if it’s safe to say this.",
+  "That thought usually appears when someone has been holding themselves together for too long.",
+  "You chose those words carefully. Almost like you didn’t want to scare yourself.",
+  "There’s something unfinished in what you wrote. I can feel the pause."
+];
+
+function post() {
+  const text = document.getElementById("input").value.trim();
+  if (!text) return;
+
+  const board = document.getElementById("board");
+
+  const postDiv = document.createElement("div");
+  postDiv.className = "post";
+
+  const body = document.createElement("div");
+  body.className = "post-body";
+  body.textContent = text;
+
+  const ai = document.createElement("div");
+  ai.className = "ai";
+  ai.textContent = "Circle is thinking…";
+
+  postDiv.appendChild(body);
+  postDiv.appendChild(ai);
+  board.appendChild(postDiv);
+
+  document.getElementById("input").value = "";
+
+  setTimeout(() => {
+    const r = responses[Math.floor(Math.random() * responses.length)];
+    ai.textContent = "Circle: " + r;
+  }, 900);
+}
+</script>
 </body>
 </html>
