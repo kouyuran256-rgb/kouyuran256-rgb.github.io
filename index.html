@@ -5,54 +5,54 @@
 <title>Circle Hub — Anonymous Forum & Random Chat</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-/* ---------------- BASE ---------------- */
-body {
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  margin:0; padding:0; background:#f4f4f9; color:#111827;
-}
+/* ---------- BASE ---------- */
+body { font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,sans-serif; margin:0; padding:0; background:#f4f4f9; color:#111827; transition: background .3s, color .3s;}
 .container { max-width:760px; margin:0 auto; padding:40px 16px; }
-
-/* Header / Tabs */
 header { display:flex; justify-content:space-between; align-items:center; margin-bottom:40px; }
 header h1 { font-size:28px; font-weight:700; color:#4f46e5; }
-header nav button {
-  margin-left:10px; padding:8px 16px; border-radius:20px; border:none; cursor:pointer; transition:.2s;
-}
+header nav button { margin-left:10px; padding:8px 16px; border-radius:20px; border:none; cursor:pointer; transition:.2s; }
 header nav button.active { background:#4f46e5; color:white; }
 header nav button.inactive { background:#e5e7eb; color:#111; }
-
-/* Section styling */
 section { display:none; }
 section.active { display:block; }
 
-/* ---------------- FORUM ---------------- */
-.card { background:#fff; border-radius:16px; padding:20px; box-shadow:0 8px 24px rgba(0,0,0,0.05); margin-bottom:24px; }
+/* ---------- DARK MODE ---------- */
+body.dark { background:#111827; color:#f4f4f9; }
+body.dark header h1 { color:#a78bfa; }
+body.dark header nav button.active { background:#a78bfa; color:#111827; }
+body.dark .card { background:#1f2937; box-shadow:0 8px 24px rgba(0,0,0,0.3); }
+body.dark .post-body, body.dark .ai { color:#d1d5db; }
+body.dark textarea, body.dark #messageInput { background:#374151; color:#f4f4f9; border:1px solid #4b5563; }
+body.dark .bubble { background:#374151; color:#f4f4f9; }
+
+/* ---------- FORUM ---------- */
+.card { background:#fff; border-radius:16px; padding:20px; box-shadow:0 8px 24px rgba(0,0,0,0.05); margin-bottom:24px; transition:.3s;}
 .post { padding:16px 0; border-bottom:1px solid #e5e7eb; }
 .post:last-child { border-bottom:none; }
 .post-body { font-size:15px; color:#374151; }
 .ai { margin-top:12px; font-size:14px; color:#6b7280; font-style:italic; }
-textarea { width:100%; border:1px solid #e5e7eb; border-radius:12px; padding:12px; font-size:15px; resize:vertical; min-height:80px; }
+textarea { width:100%; border:1px solid #e5e7eb; border-radius:12px; padding:12px; font-size:15px; resize:vertical; min-height:80px; transition:.3s;}
 button.post-btn { margin-top:12px; background:#4f46e5; color:white; border:none; border-radius:999px; padding:10px 20px; font-size:14px; cursor:pointer; }
 .note { font-size:14px; color:#6b7280; margin-top:12px; }
 
-/* ---------------- CHAT ---------------- */
-#chatBox { background:white; border-radius:15px; padding:16px; height:400px; overflow-y:auto; border:1px solid #ddd; margin-bottom:12px; }
+/* ---------- CHAT ---------- */
+#chatBox { background:white; border-radius:15px; padding:16px; height:400px; overflow-y:auto; border:1px solid #ddd; margin-bottom:12px; transition:.3s;}
 .message { display:flex; align-items:flex-end; margin:6px 0; }
 .message.me { justify-content:flex-end; }
 .message .avatar { width:30px; height:30px; border-radius:50%; background:#ccc; margin:0 8px; flex-shrink:0; }
-.message .bubble { max-width:70%; padding:8px 14px; border-radius:15px; background:#e5e7eb; font-size:14px; word-wrap:break-word; }
+.message .bubble { max-width:70%; padding:8px 14px; border-radius:15px; background:#e5e7eb; font-size:14px; word-wrap:break-word; transition:.2s; opacity:0; transform:translateY(10px);}
 .message.me .bubble { background:#4f46e5; color:white; }
+.message .bubble.show { opacity:1; transform:translateY(0);}
 #inputContainer { display:flex; margin-bottom:40px; }
 #messageInput { flex:1; padding:10px; border-radius:25px; border:1px solid #ccc; font-size:14px; }
 #sendBtn { padding:10px 20px; margin-left:10px; border-radius:25px; border:none; background:#4f46e5; color:white; font-size:14px; cursor:pointer; }
 
-/* Footer */
+/* ---------- Footer ---------- */
 footer { text-align:center; font-size:14px; color:#9ca3af; margin-top:48px; }
 footer a { color:#6b7280; text-decoration:none; margin:0 8px; }
 </style>
 </head>
 <body>
-
 <div class="container">
 <header>
   <h1>Circle Hub</h1>
@@ -62,9 +62,9 @@ footer a { color:#6b7280; text-decoration:none; margin:0 8px; }
   </nav>
 </header>
 
-<!-- ---------------- LANDING ---------------- -->
+<!-- ---------- LANDING ---------- -->
 <section id="landing" class="active" style="text-align:center;">
-  <h2 style="font-size:24px; color:#111; margin-bottom:20px;">Welcome to Circle Hub</h2>
+  <h2 style="font-size:24px; margin-bottom:20px;">Welcome to Circle Hub</h2>
   <p style="font-size:16px; color:#6b7280; margin-bottom:40px;">
     A modern anonymous community with reflective AI and real-time chat.
   </p>
@@ -76,20 +76,18 @@ footer a { color:#6b7280; text-decoration:none; margin:0 8px; }
   </button>
 </section>
 
-<!-- ---------------- FORUM ---------------- -->
+<!-- ---------- FORUM ---------- -->
 <section id="forumTab">
-  <h2 style="text-align:center; font-size:24px; color:#111; margin-bottom:20px;">Anonymous Forum</h2>
+  <h2 style="text-align:center; font-size:24px; margin-bottom:20px;">Anonymous Forum</h2>
   <p style="text-align:center; color:#6b7280; margin-bottom:30px;">
     Share your thoughts freely. AI offers reflective responses.
   </p>
-
   <div class="card" id="board">
     <div class="post">
       <div class="post-body">I sometimes feel like I am not living up to my potential.</div>
       <div class="ai">Circle: That feeling of "not enough" often comes from your inner critic.</div>
     </div>
   </div>
-
   <div class="card">
     <strong>Post something</strong>
     <p class="note">Posts are local and temporary. AI reflections are suggestive, not advice.</p>
@@ -99,7 +97,7 @@ footer a { color:#6b7280; text-decoration:none; margin:0 8px; }
   </div>
 </section>
 
-<!-- ---------------- RANDOM CHAT ---------------- -->
+<!-- ---------- CHAT (SIMULATED FIRST) ---------- -->
 <section id="chatTab">
   <p style="text-align:center; color:#6b7280; margin-bottom:20px;">
     Click start to be randomly paired. Messages disappear on refresh.
@@ -120,133 +118,39 @@ footer a { color:#6b7280; text-decoration:none; margin:0 8px; }
   </p>
   © Circle Hub 2026
 </footer>
-</div>
 
-<script type="module">
-// ---------------- TAB SWITCHING ----------------
+<script>
+// ---------- TAB SWITCH ----------
 const forumTabBtn = document.getElementById('forumTabBtn');
 const chatTabBtn = document.getElementById('chatTabBtn');
 const forumTab = document.getElementById('forumTab');
 const chatTab = document.getElementById('chatTab');
 const landing = document.getElementById('landing');
-
 function showSection(section){
   [landing, forumTab, chatTab].forEach(s => s.classList.remove('active'));
   section.classList.add('active');
 }
-
 forumTabBtn.onclick = () => { showSection(forumTab); forumTabBtn.className='active'; chatTabBtn.className='inactive'; }
 chatTabBtn.onclick = () => { showSection(chatTab); chatTabBtn.className='active'; forumTabBtn.className='inactive'; }
 document.getElementById('startForum').onclick = forumTabBtn.onclick;
 document.getElementById('startChat').onclick = chatTabBtn.onclick;
 
-// ---------------- FORUM JS ----------------
-const forumAIResponses = [
-  "You paused there. That often means it matters more than you're admitting.",
-  "Your calm words hide stronger emotions underneath.",
-  "Most people would have stopped typing. You didn't.",
-  "You're exploring your safety in saying this, not seeking an answer.",
-  "That thought shows persistence under stress.",
-  "Your words were chosen carefully, almost like a protective shield.",
-  "Something is left unsaid, a subtle pause we notice."
-];
+// ---------- DARK MODE ----------
+const darkToggle=document.createElement('button');
+darkToggle.textContent='🌙'; darkToggle.style.cssText='position:fixed; top:16px; right:16px; padding:8px 12px; border:none; border-radius:12px; cursor:pointer; background:#4f46e5; color:white;';
+document.body.appendChild(darkToggle);
+darkToggle.onclick = ()=>{ document.body.classList.toggle('dark'); localStorage.setItem('theme', document.body.classList.contains('dark')?'dark':'light');}
+window.onload = ()=>{ if(localStorage.getItem('theme')==='dark') document.body.classList.add('dark');}
 
-document.getElementById('forumPostBtn').onclick = () => {
-  const text = document.getElementById('forumInput').value.trim();
-  if (!text) return;
+// ---------- FORUM ----------
+const forumAIResponses=["You paused there. That often means it matters more than you're admitting.","Your calm words hide stronger emotions underneath.","Most people would have stopped typing. You didn't.","You're exploring your safety in saying this, not seeking an answer.","That thought shows persistence under stress.","Your words were chosen carefully, almost like a protective shield.","Something is left unsaid, a subtle pause we notice"];
+document.getElementById('forumPostBtn').onclick=()=>{ const text=document.getElementById('forumInput').value.trim(); if(!text)return; const board=document.getElementById('board'); const postDiv=document.createElement('div'); postDiv.className='post'; const body=document.createElement('div'); body.className='post-body'; body.textContent=text; const ai=document.createElement('div'); ai.className='ai'; ai.textContent='Circle is thinking…'; postDiv.appendChild(body); postDiv.appendChild(ai); board.appendChild(postDiv); document.getElementById('forumInput').value=''; setTimeout(()=>{ const r=forumAIResponses[Math.floor(Math.random()*forumAIResponses.length)]; ai.textContent='Circle: '+r; },900); board.scrollTop=board.scrollHeight; };
 
-  const board = document.getElementById('board');
-
-  const postDiv = document.createElement('div');
-  postDiv.className = "post";
-  postDiv.style.padding="16px 0"; 
-  postDiv.style.borderBottom="1px solid #e5e7eb";
-  
-  const body = document.createElement('div');
-  body.className = "post-body";
-  body.textContent = text;
-  
-  const ai = document.createElement('div');
-  ai.className = "ai";
-  ai.textContent = "Circle is thinking…";
-
-  postDiv.appendChild(body);
-  postDiv.appendChild(ai);
-  board.appendChild(postDiv);
-
-  document.getElementById('forumInput').value = "";
-
-  setTimeout(() => {
-    const r = forumAIResponses[Math.floor(Math.random() * forumAIResponses.length)];
-    ai.textContent = "Circle: " + r;
-  }, 900);
-
-  board.scrollTop = board.scrollHeight;
-};
-
-// ---------------- RANDOM P2P CHAT JS ----------------
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
-import Peer from "https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAC9HWZx10dKzI1vy9gm5gWODmBYrdGUlM",
-  authDomain: "us256-33f2c.firebaseapp.com",
-  projectId: "us256-33f2c",
-  storageBucket: "us256-33f2c.firebasestorage.app",
-  messagingSenderId: "456338392274",
-  appId: "1:456338392274:web:74ee8577be6625b778990b",
-  measurementId: "G-F286QQYRY6"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const waitingUsersCol = collection(db, "waitingUsers");
-
-let myPeer = new Peer(undefined,{host:'0.peerjs.com',port:443,path:'/'});
-let conn;
-
-const chatInput = document.getElementById('messageInput');
-const sendButton = document.getElementById('sendBtn');
-const startButton = document.getElementById('startBtn');
-const chatBoxEl = document.getElementById('chatBox');
-
-function randomColor(){const colors=['#F87171','#FBBF24','#34D399','#60A5FA','#A78BFA','#F472B6'];return colors[Math.floor(Math.random()*colors.length)];}
-function appendMessage(msg,isMe=false){const div=document.createElement('div');div.classList.add('message');if(isMe) div.classList.add('me');const avatar=document.createElement('div');avatar.className='avatar';avatar.style.background=randomColor();const bubble=document.createElement('div');bubble.className='bubble';bubble.textContent=msg;if(isMe){div.appendChild(bubble);div.appendChild(avatar);}else{div.appendChild(avatar);div.appendChild(bubble);}chatBoxEl.appendChild(div);chatBoxEl.scrollTop=chatBoxEl.scrollHeight;}
-
-sendButton.onclick = () => {
-  const msg = chatInput.value.trim();
-  if(!msg || !conn || conn.open===false) return;
-  conn.send(msg);
-  appendMessage(msg,true);
-  chatInput.value='';
-};
-
-startButton.onclick = async()=>{
-  startButton.disabled=true; appendMessage("🔹 Waiting for a random stranger...");
-  myPeer.on('open', async id=>{
-    const myDoc = await addDoc(waitingUsersCol, {peerId:id});
-    onSnapshot(waitingUsersCol, snapshot=>{
-      snapshot.docChanges().forEach(async change=>{
-        if(change.type==="added" && change.doc.id!==myDoc.id){
-          const otherPeerId = change.doc.data().peerId;
-          appendMessage("🔹 Stranger found. Connecting...");
-          conn = myPeer.connect(otherPeerId);
-          conn.on('open', ()=>{ appendMessage("✅ Connection established. Start chatting!"); chatInput.disabled=false; sendButton.disabled=false; });
-          conn.on('data', data=> appendMessage(data,false));
-          deleteDoc(doc(db,"waitingUsers",change.doc.id));
-          deleteDoc(doc(db,"waitingUsers",myDoc.id));
-        }
-      });
-    });
-  });
-  myPeer.on('connection', c=>{
-    conn = c;
-    conn.on('open',()=>{ appendMessage("✅ Stranger connected. Start chatting!"); chatInput.disabled=false; sendButton.disabled=false; });
-    conn.on('data', data=> appendMessage(data,false));
-  });
-}
+// ---------- CHAT SIMULATION ----------
+const chatInput=document.getElementById('messageInput'); const sendButton=document.getElementById('sendBtn'); const startButton=document.getElementById('startBtn'); const chatBoxEl=document.getElementById('chatBox'); let simulatedPartner=null;
+function appendMessage(msg,isMe=false){const div=document.createElement('div');div.classList.add('message');if(isMe) div.classList.add('me'); const avatar=document.createElement('div'); avatar.className='avatar'; avatar.style.background=isMe?'#4f46e5':'#ccc'; const bubble=document.createElement('div'); bubble.className='bubble'; bubble.textContent=msg; bubble.classList.add('show'); if(isMe){ div.appendChild(bubble); div.appendChild(avatar);} else {div.appendChild(avatar); div.appendChild(bubble);} chatBoxEl.appendChild(div); chatBoxEl.scrollTop=chatBoxEl.scrollHeight;}
+startButton.onclick=()=>{ startButton.disabled=true; appendMessage("🔹 Waiting for a random stranger..."); setTimeout(()=>{ appendMessage("✅ Stranger connected. Start chatting!"); simulatedPartner=true; chatInput.disabled=false; sendButton.disabled=false; },1500);}
+sendButton.onclick=()=>{ const msg=chatInput.value.trim(); if(!msg||!simulatedPartner) return; appendMessage(msg,true); setTimeout(()=>{ appendMessage("Stranger: "+["Interesting!","I see.","Go on...","Hmm..."][Math.floor(Math.random()*4)],false); },800); chatInput.value='';}
 </script>
-
 </body>
 </html>
