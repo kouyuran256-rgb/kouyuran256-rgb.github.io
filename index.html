@@ -33,7 +33,6 @@ body.dark .bubble { background:#374151; color:#f4f4f9; }
 .ai { margin-top:12px; font-size:14px; color:#6b7280; font-style:italic; }
 textarea { width:100%; border:1px solid #e5e7eb; border-radius:12px; padding:12px; font-size:15px; resize:vertical; min-height:80px; transition:.3s;}
 button.post-btn { margin-top:12px; background:#4f46e5; color:white; border:none; border-radius:999px; padding:10px 20px; font-size:14px; cursor:pointer; }
-.note { font-size:14px; color:#6b7280; margin-top:12px; }
 
 /* ---------- CHAT ---------- */
 #chatBox { background:white; border-radius:15px; padding:16px; height:400px; overflow-y:auto; border:1px solid #ddd; margin-bottom:12px; transition:.3s;}
@@ -47,7 +46,7 @@ button.post-btn { margin-top:12px; background:#4f46e5; color:white; border:none;
 #messageInput { flex:1; padding:10px; border-radius:25px; border:1px solid #ccc; font-size:14px; }
 #sendBtn { padding:10px 20px; margin-left:10px; border-radius:25px; border:none; background:#4f46e5; color:white; font-size:14px; cursor:pointer; }
 
-/* ---------- Footer ---------- */
+/* Footer */
 footer { text-align:center; font-size:14px; color:#9ca3af; margin-top:48px; }
 footer a { color:#6b7280; text-decoration:none; margin:0 8px; }
 </style>
@@ -97,7 +96,7 @@ footer a { color:#6b7280; text-decoration:none; margin:0 8px; }
   </div>
 </section>
 
-<!-- ---------- CHAT (SIMULATED FIRST) ---------- -->
+<!-- ---------- CHAT ---------- -->
 <section id="chatTab">
   <p style="text-align:center; color:#6b7280; margin-bottom:20px;">
     Click start to be randomly paired. Messages disappear on refresh.
@@ -118,39 +117,144 @@ footer a { color:#6b7280; text-decoration:none; margin:0 8px; }
   </p>
   © Circle Hub 2026
 </footer>
+</div>
+
+<!-- ---------- SCRIPTS ---------- -->
+<script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <script>
-// ---------- TAB SWITCH ----------
+// ----------------- TAB SWITCH -----------------
 const forumTabBtn = document.getElementById('forumTabBtn');
 const chatTabBtn = document.getElementById('chatTabBtn');
 const forumTab = document.getElementById('forumTab');
 const chatTab = document.getElementById('chatTab');
 const landing = document.getElementById('landing');
 function showSection(section){
-  [landing, forumTab, chatTab].forEach(s => s.classList.remove('active'));
+  [landing, forumTab, chatTab].forEach(s=>s.classList.remove('active'));
   section.classList.add('active');
 }
-forumTabBtn.onclick = () => { showSection(forumTab); forumTabBtn.className='active'; chatTabBtn.className='inactive'; }
-chatTabBtn.onclick = () => { showSection(chatTab); chatTabBtn.className='active'; forumTabBtn.className='inactive'; }
-document.getElementById('startForum').onclick = forumTabBtn.onclick;
-document.getElementById('startChat').onclick = chatTabBtn.onclick;
+forumTabBtn.onclick=()=>{showSection(forumTab); forumTabBtn.className='active'; chatTabBtn.className='inactive';}
+chatTabBtn.onclick=()=>{showSection(chatTab); chatTabBtn.className='active'; forumTabBtn.className='inactive';}
+document.getElementById('startForum').onclick=forumTabBtn.onclick;
+document.getElementById('startChat').onclick=chatTabBtn.onclick;
 
-// ---------- DARK MODE ----------
+// ----------------- DARK MODE -----------------
 const darkToggle=document.createElement('button');
-darkToggle.textContent='🌙'; darkToggle.style.cssText='position:fixed; top:16px; right:16px; padding:8px 12px; border:none; border-radius:12px; cursor:pointer; background:#4f46e5; color:white;';
+darkToggle.textContent='🌙';
+darkToggle.style.cssText='position:fixed; top:16px; right:16px; padding:8px 12px; border:none; border-radius:12px; cursor:pointer; background:#4f46e5; color:white;';
 document.body.appendChild(darkToggle);
-darkToggle.onclick = ()=>{ document.body.classList.toggle('dark'); localStorage.setItem('theme', document.body.classList.contains('dark')?'dark':'light');}
-window.onload = ()=>{ if(localStorage.getItem('theme')==='dark') document.body.classList.add('dark');}
+darkToggle.onclick=()=>{document.body.classList.toggle('dark'); localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light');}
+window.onload=()=>{if(localStorage.getItem('theme')==='dark') document.body.classList.add('dark');}
 
-// ---------- FORUM ----------
+// ----------------- FORUM -----------------
 const forumAIResponses=["You paused there. That often means it matters more than you're admitting.","Your calm words hide stronger emotions underneath.","Most people would have stopped typing. You didn't.","You're exploring your safety in saying this, not seeking an answer.","That thought shows persistence under stress.","Your words were chosen carefully, almost like a protective shield.","Something is left unsaid, a subtle pause we notice"];
-document.getElementById('forumPostBtn').onclick=()=>{ const text=document.getElementById('forumInput').value.trim(); if(!text)return; const board=document.getElementById('board'); const postDiv=document.createElement('div'); postDiv.className='post'; const body=document.createElement('div'); body.className='post-body'; body.textContent=text; const ai=document.createElement('div'); ai.className='ai'; ai.textContent='Circle is thinking…'; postDiv.appendChild(body); postDiv.appendChild(ai); board.appendChild(postDiv); document.getElementById('forumInput').value=''; setTimeout(()=>{ const r=forumAIResponses[Math.floor(Math.random()*forumAIResponses.length)]; ai.textContent='Circle: '+r; },900); board.scrollTop=board.scrollHeight; };
+document.getElementById('forumPostBtn').onclick=()=>{ 
+  const text=document.getElementById('forumInput').value.trim(); if(!text)return;
+  const board=document.getElementById('board');
+  const postDiv=document.createElement('div'); postDiv.className='post';
+  const body=document.createElement('div'); body.className='post-body'; body.textContent=text;
+  const ai=document.createElement('div'); ai.className='ai'; ai.textContent='Circle is thinking…';
+  postDiv.appendChild(body); postDiv.appendChild(ai); board.appendChild(postDiv);
+  document.getElementById('forumInput').value='';
+  setTimeout(()=>{ const r=forumAIResponses[Math.floor(Math.random()*forumAIResponses.length)]; ai.textContent='Circle: '+r; },900);
+  board.scrollTop=board.scrollHeight;
+}
 
-// ---------- CHAT SIMULATION ----------
-const chatInput=document.getElementById('messageInput'); const sendButton=document.getElementById('sendBtn'); const startButton=document.getElementById('startBtn'); const chatBoxEl=document.getElementById('chatBox'); let simulatedPartner=null;
-function appendMessage(msg,isMe=false){const div=document.createElement('div');div.classList.add('message');if(isMe) div.classList.add('me'); const avatar=document.createElement('div'); avatar.className='avatar'; avatar.style.background=isMe?'#4f46e5':'#ccc'; const bubble=document.createElement('div'); bubble.className='bubble'; bubble.textContent=msg; bubble.classList.add('show'); if(isMe){ div.appendChild(bubble); div.appendChild(avatar);} else {div.appendChild(avatar); div.appendChild(bubble);} chatBoxEl.appendChild(div); chatBoxEl.scrollTop=chatBoxEl.scrollHeight;}
-startButton.onclick=()=>{ startButton.disabled=true; appendMessage("🔹 Waiting for a random stranger..."); setTimeout(()=>{ appendMessage("✅ Stranger connected. Start chatting!"); simulatedPartner=true; chatInput.disabled=false; sendButton.disabled=false; },1500);}
-sendButton.onclick=()=>{ const msg=chatInput.value.trim(); if(!msg||!simulatedPartner) return; appendMessage(msg,true); setTimeout(()=>{ appendMessage("Stranger: "+["Interesting!","I see.","Go on...","Hmm..."][Math.floor(Math.random()*4)],false); },800); chatInput.value='';}
+// ----------------- FIREBASE CONFIG -----------------
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// ----------------- PEERJS SETUP -----------------
+let peer = new Peer();
+let conn = null;
+let partnerId = null;
+const signalsRef = db.collection('signals');
+
+peer.on('open', id=>{
+  console.log('My Peer ID:', id);
+  signalsRef.add({peerId:id, timestamp:Date.now()});
+  findPartner(id);
+});
+
+async function findPartner(myId){
+  const snapshot = await signalsRef.orderBy('timestamp').get();
+  for(const doc of snapshot.docs){
+    const data=doc.data();
+    if(data.peerId!==myId){
+      partnerId=data.peerId;
+      conn=peer.connect(partnerId);
+      setupConnection(conn);
+      return;
+    }
+  }
+}
+
+peer.on('connection', c=>{ conn=c; partnerId=c.peer; setupConnection(conn); });
+
+function setupConnection(c){
+  c.on('open', ()=>console.log('Connected to partner!'));
+  c.on('data', data=>{
+    if(data.type==='text') appendMessage(data.msg,false);
+    else if(data.type==='image') appendImageMessage(data.data,false);
+  });
+}
+
+// ----------------- CHAT FUNCTIONS -----------------
+const chatInput=document.getElementById('messageInput'); 
+const sendButton=document.getElementById('sendBtn'); 
+const chatBoxEl=document.getElementById('chatBox');
+
+function appendMessage(msg,isMe=false){
+  const div=document.createElement('div'); div.classList.add('message'); if(isMe) div.classList.add('me');
+  const avatar=document.createElement('div'); avatar.className='avatar'; avatar.style.background=isMe?'#4f46e5':'#ccc';
+  const bubble=document.createElement('div'); bubble.className='bubble'; bubble.textContent=msg; bubble.classList.add('show');
+  if(isMe){ div.appendChild(bubble); div.appendChild(avatar);} else { div.appendChild(avatar); div.appendChild(bubble);}
+  chatBoxEl.appendChild(div); chatBoxEl.scrollTop=chatBoxEl.scrollHeight;
+}
+
+sendButton.onclick=()=>{
+  const msg=chatInput.value.trim(); if(!msg||!conn) return;
+  appendMessage(msg,true);
+  conn.send({type:'text', msg});
+  chatInput.value='';
+}
+
+// ---------- IMAGE UPLOAD ----------
+const uploadBtn=document.createElement('input');
+uploadBtn.type='file'; uploadBtn.accept='image/*'; uploadBtn.style.marginLeft='10px';
+document.getElementById('inputContainer').appendChild(uploadBtn);
+
+uploadBtn.onchange=()=>{
+  const file=uploadBtn.files[0]; if(!file||!conn) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const dataURL=e.target.result;
+    conn.send({type:'image', data:dataURL});
+    appendImageMessage(dataURL,true);
+  }
+  reader.readAsDataURL(file);
+  uploadBtn.value='';
+}
+
+function appendImageMessage(src,isMe=false){
+  const div=document.createElement('div'); div.classList.add('message'); if(isMe) div.classList.add('me');
+  const avatar=document.createElement('div'); avatar.className='avatar'; avatar.style.background=isMe?'#4f46e5':'#ccc';
+  const bubble=document.createElement('div'); bubble.className='bubble';
+  const img=document.createElement('img'); img.src=src; img.style.maxWidth='200px'; img.style.borderRadius='12px';
+  bubble.appendChild(img);
+  if(isMe){ div.appendChild(bubble); div.appendChild(avatar);} else { div.appendChild(avatar); div.appendChild(bubble);}
+  chatBoxEl.appendChild(div); chatBoxEl.scrollTop=chatBoxEl.scrollHeight;
+}
 </script>
 </body>
 </html>
