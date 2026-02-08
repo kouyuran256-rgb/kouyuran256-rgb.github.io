@@ -2,146 +2,145 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>AnonChat — Random P2P Chat</title>
+<title>Circle + Anon P2P Chat</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-/* Reset & base */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: 'Inter', system-ui, sans-serif;
-  background: #f0f2f5;
-  color: #111827;
-}
-.container {
-  max-width: 720px;
-  margin: 50px auto;
-  padding: 0 20px;
-}
+/* Base styles */
+body { font-family: 'Inter', system-ui, sans-serif; background:#f4f4f9; margin:0; padding:0; }
+.container { max-width: 720px; margin:40px auto; padding:0 16px; }
+h1 { text-align:center; color:#333; margin-bottom:10px; }
+.tab-btns { display:flex; justify-content:center; margin-bottom:20px; }
+.tab-btns button { margin:0 10px; padding:10px 20px; border:none; border-radius:25px; cursor:pointer; background:#e5e7eb; font-weight:600; transition:0.2s; }
+.tab-btns button.active { background:#4f46e5; color:white; }
+.tab-content { display:none; }
+.tab-content.active { display:block; }
 
-/* Header */
-h1 {
-  text-align: center;
-  font-size: 36px;
-  font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 8px;
-}
-.subtitle {
-  text-align: center;
-  font-size: 16px;
-  color: #6b7280;
-  margin-bottom: 30px;
-}
+/* Forum styles */
+.subtitle { text-align:center; color:#6b7280; margin-bottom:30px; }
+.card { background:#fff; border-radius:16px; padding:20px; box-shadow:0 8px 24px rgba(0,0,0,0.04); margin-bottom:24px; }
+.post { padding:16px 0; border-bottom:1px solid #e5e7eb; }
+.post:last-child { border-bottom:none; }
+.post-body { font-size:15px; color:#374151; }
+.ai { margin-top:12px; font-size:14px; color:#6b7280; font-style:italic; }
+textarea { width:100%; border:1px solid #e5e7eb; border-radius:12px; padding:12px; font-size:15px; resize:vertical; min-height:80px; }
+button.post-btn { margin-top:12px; background:#2563eb; color:white; border:none; border-radius:999px; padding:10px 20px; font-size:14px; cursor:pointer; }
+.note { font-size:14px; color:#6b7280; margin-top:12px; }
+footer { text-align:center; font-size:14px; color:#9ca3af; margin-top:48px; }
+footer a { color:#6b7280; text-decoration:none; margin:0 8px; }
 
-/* Start button */
-#startBtn {
-  display: block;
-  margin: 0 auto 20px auto;
-  padding: 14px 30px;
-  background: linear-gradient(90deg,#4f46e5,#6366f1);
-  color: #fff;
-  font-size: 16px;
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-#startBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-}
-
-/* Chat box */
-#chatBox {
-  background: #ffffff;
-  border-radius: 20px;
-  padding: 16px;
-  height: 450px;
-  overflow-y: auto;
-  border: 1px solid #e5e7eb;
-  margin-bottom: 15px;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.04);
-}
-
-/* Messages */
-.message {
-  display: flex;
-  align-items: flex-end;
-  margin: 8px 0;
-  animation: fadeIn 0.25s ease;
-}
-.message.me { justify-content: flex-end; }
-.message .avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: #d1d5db;
-  margin: 0 8px;
-}
-.message .bubble {
-  max-width: 68%;
-  padding: 10px 16px;
-  border-radius: 20px;
-  background: #e5e7eb;
-  font-size: 15px;
-  line-height: 1.4;
-  word-wrap: break-word;
-}
-.message.me .bubble { background: #4f46e5; color: #fff; }
-
-/* Input container */
-#inputContainer {
-  display: flex;
-  margin-bottom: 40px;
-}
-#messageInput {
-  flex: 1;
-  padding: 12px 16px;
-  border-radius: 25px;
-  border: 1px solid #d1d5db;
-  font-size: 15px;
-}
-#sendBtn {
-  padding: 12px 24px;
-  margin-left: 12px;
-  border-radius: 25px;
-  border: none;
-  background: #4f46e5;
-  color: white;
-  cursor: pointer;
-  font-size: 15px;
-  transition: transform 0.1s ease;
-}
-#sendBtn:hover { transform: translateY(-1px); }
-
-/* Animations */
-@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
-
+/* P2P Chat styles */
+#chatBox { background:white; border-radius:15px; padding:16px; height:400px; overflow-y:auto; border:1px solid #ddd; margin-bottom:12px; }
+.message { display:flex; align-items:flex-end; margin:6px 0; }
+.message.me { justify-content:flex-end; }
+.message .avatar { width:30px; height:30px; border-radius:50%; background:#ccc; margin:0 8px; }
+.message .bubble { max-width:70%; padding:8px 14px; border-radius:15px; background:#e5e7eb; font-size:14px; word-wrap:break-word; }
+.message.me .bubble { background:#4f46e5; color:white; }
+#inputContainer { display:flex; margin-bottom:40px; }
+#messageInput { flex:1; padding:10px; border-radius:25px; border:1px solid #ccc; font-size:14px; }
+#sendBtn { padding:10px 20px; margin-left:10px; border-radius:25px; border:none; background:#4f46e5; color:white; font-size:14px; cursor:pointer; }
 </style>
 </head>
 <body>
 
 <div class="container">
-<h1>AnonChat</h1>
-<p class="subtitle">Connect with a random stranger instantly. Your messages are private and disappear on refresh.</p>
-
-<button id="startBtn">Start Random Chat</button>
-
-<div id="chatBox"></div>
-
-<div id="inputContainer">
-  <input type="text" id="messageInput" placeholder="Type your message..." disabled>
-  <button id="sendBtn" disabled>Send</button>
+<h1>Circle + Random Chat</h1>
+<div class="tab-btns">
+  <button id="forumTabBtn" class="active">Forum</button>
+  <button id="chatTabBtn">Random Chat</button>
 </div>
+
+<!-- Forum -->
+<div id="forumTab" class="tab-content active">
+  <p class="subtitle">A calm public forum with reflective AI presence.</p>
+  <div class="card" id="board">
+    <div class="post">
+      <div class="post-body">I keep thinking I should be doing more with my life.</div>
+      <div class="ai">Circle: You said “should” very softly. That usually means you’re already tired.</div>
+    </div>
+  </div>
+  <div class="card">
+    <strong>Post something</strong>
+    <p class="note">This is a local demo. Posts are not stored. AI responses are reflective, not advice.</p>
+    <textarea id="input" placeholder="Say something you usually keep to yourself..."></textarea>
+    <button class="post-btn" onclick="post()">Post</button>
+    <p class="note">Illegal content, harassment, scams, or adult material are prohibited.</p>
+  </div>
+</div>
+
+<!-- Random Chat -->
+<div id="chatTab" class="tab-content">
+  <p class="subtitle">Click start to be randomly paired. Messages disappear on refresh.</p>
+  <button id="startBtn">Start Chat</button>
+  <div id="chatBox"></div>
+  <div id="inputContainer">
+    <input type="text" id="messageInput" placeholder="Type a message..." disabled>
+    <button id="sendBtn" disabled>Send</button>
+  </div>
+</div>
+
+<footer>
+  <p>This website is NOT a dating service and does NOT provide matchmaking.</p>
+  <p>
+    <a href="privacy.html">Privacy</a> ·
+    <a href="rules.html">Community Rules</a>
+  </p>
+  © Circle
+</footer>
 </div>
 
 <script type="module">
+// --------------------- Forum JS ---------------------
+const AI_NAME="Honey";
+const responses=[
+  "You didn’t rush that sentence. That tells me it matters more than you’re admitting.",
+  "You explained it calmly, but the feeling underneath doesn’t sound calm.",
+  "Most people would have stopped typing earlier. You didn’t.",
+  "You’re not looking for an answer. You’re checking if it’s safe to say this.",
+  "That thought usually appears when someone has been holding themselves together for too long.",
+  "You chose those words carefully. Almost like you didn’t want to scare yourself.",
+  "There’s something unfinished in what you wrote. I can feel the pause."
+];
+function post(){
+  const text=document.getElementById("input").value.trim();
+  if(!text) return;
+  const board=document.getElementById("board");
+  const postDiv=document.createElement("div");
+  postDiv.className="post";
+  const body=document.createElement("div");
+  body.className="post-body";
+  body.textContent=text;
+  const ai=document.createElement("div");
+  ai.className="ai";
+  ai.textContent="Circle is thinking…";
+  postDiv.appendChild(body);
+  postDiv.appendChild(ai);
+  board.appendChild(postDiv);
+  document.getElementById("input").value="";
+  setTimeout(()=>{
+    const r=responses[Math.floor(Math.random()*responses.length)];
+    ai.textContent=AI_NAME+": "+r;
+  },900);
+}
+
+// --------------------- Tab Switching ---------------------
+const forumTabBtn=document.getElementById('forumTabBtn');
+const chatTabBtn=document.getElementById('chatTabBtn');
+const forumTab=document.getElementById('forumTab');
+const chatTab=document.getElementById('chatTab');
+forumTabBtn.onclick=()=>{
+  forumTabBtn.classList.add('active'); chatTabBtn.classList.remove('active');
+  forumTab.classList.add('active'); chatTab.classList.remove('active');
+};
+chatTabBtn.onclick=()=>{
+  chatTabBtn.classList.add('active'); forumTabBtn.classList.remove('active');
+  chatTab.classList.add('active'); forumTab.classList.remove('active');
+};
+
+// --------------------- Random Chat JS ---------------------
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
 import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 import Peer from "https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics.js";
 
-// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAC9HWZx10dKzI1vy9gm5gWODmBYrdGUlM",
   authDomain: "us256-33f2c.firebaseapp.com",
@@ -153,101 +152,40 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 const db = getFirestore(app);
 const waitingUsersCol = collection(db, "waitingUsers");
 
-// PeerJS
-let myPeer = new Peer(undefined, { host: '0.peerjs.com', port: 443, path: '/' });
+let myPeer=new Peer(undefined,{host:'0.peerjs.com',port:443,path:'/'});
 let conn;
 
-const chatBox = document.getElementById('chatBox');
-const messageInput = document.getElementById('messageInput');
-const sendBtn = document.getElementById('sendBtn');
-const startBtn = document.getElementById('startBtn');
+const chatInput=document.getElementById('messageInput');
+const sendButton=document.getElementById('sendBtn');
+const startButton=document.getElementById('startBtn');
+const chatBoxEl=document.getElementById('chatBox');
 
-// Random avatar color
-function randomColor() {
-  const colors = ['#F87171','#FBBF24','#34D399','#60A5FA','#A78BFA','#F472B6'];
-  return colors[Math.floor(Math.random() * colors.length)];
-}
-
-// Append message
-function appendMessage(msg, isMe=false){
-  const div = document.createElement('div');
-  div.classList.add('message');
-  if(isMe) div.classList.add('me');
-
-  const avatar = document.createElement('div');
-  avatar.className = 'avatar';
-  avatar.style.background = randomColor();
-
-  const bubble = document.createElement('div');
-  bubble.className = 'bubble';
-  bubble.textContent = msg;
-
-  if(isMe){
-    div.appendChild(bubble);
-    div.appendChild(avatar);
-  } else {
-    div.appendChild(avatar);
-    div.appendChild(bubble);
-  }
-
-  chatBox.appendChild(div);
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-// Send message
-sendBtn.onclick = () => {
-  const msg = messageInput.value;
-  if(!msg || !conn || conn.open === false) return;
-  conn.send(msg);
-  appendMessage(msg, true);
-  messageInput.value = '';
-}
-
-// Start random chat
-startBtn.onclick = async () => {
-  startBtn.disabled = true;
-  appendMessage("🔹 Waiting for a random stranger...");
-
-  myPeer.on('open', async id => {
-    const myDoc = await addDoc(waitingUsersCol, { peerId: id });
-
-    onSnapshot(waitingUsersCol, snapshot => {
-      snapshot.docChanges().forEach(async change => {
-        if(change.type === "added" && change.doc.id !== myDoc.id){
-          const otherPeerId = change.doc.data().peerId;
+function randomColor(){const colors=['#F87171','#FBBF24','#34D399','#60A5FA','#A78BFA','#F472B6'];return colors[Math.floor(Math.random()*colors.length)];}
+function appendMessage(msg,isMe=false){const div=document.createElement('div');div.classList.add('message');if(isMe) div.classList.add('me');const avatar=document.createElement('div');avatar.className='avatar';avatar.style.background=randomColor();const bubble=document.createElement('div');bubble.className='bubble';bubble.textContent=msg;if(isMe){div.appendChild(bubble);div.appendChild(avatar);}else{div.appendChild(avatar);div.appendChild(bubble);}chatBoxEl.appendChild(div);chatBoxEl.scrollTop=chatBoxEl.scrollHeight;}
+sendButton.onclick=()=>{const msg=chatInput.value.trim();if(!msg||!conn||conn.open===false) return;conn.send(msg);appendMessage(msg,true);chatInput.value='';}
+startButton.onclick=async()=>{
+  startButton.disabled=true;appendMessage("🔹 Waiting for a random stranger...");
+  myPeer.on('open',async id=>{
+    const myDoc=await addDoc(waitingUsersCol,{peerId:id});
+    onSnapshot(waitingUsersCol,snapshot=>{
+      snapshot.docChanges().forEach(async change=>{
+        if(change.type==="added"&&change.doc.id!==myDoc.id){
+          const otherPeerId=change.doc.data().peerId;
           appendMessage("🔹 Stranger found. Connecting...");
-          conn = myPeer.connect(otherPeerId);
-
-          conn.on('open', () => {
-            appendMessage("✅ Connection established. Start chatting!");
-            messageInput.disabled = false;
-            sendBtn.disabled = false;
-          });
-
-          conn.on('data', data => appendMessage(data, false));
-
-          deleteDoc(doc(db, "waitingUsers", change.doc.id));
-          deleteDoc(doc(db, "waitingUsers", myDoc.id));
+          conn=myPeer.connect(otherPeerId);
+          conn.on('open',()=>{appendMessage("✅ Connection established. Start chatting!");chatInput.disabled=false;sendButton.disabled=false;});
+          conn.on('data',data=>appendMessage(data,false));
+          deleteDoc(doc(db,"waitingUsers",change.doc.id));
+          deleteDoc(doc(db,"waitingUsers",myDoc.id));
         }
       });
     });
   });
-
-  myPeer.on('connection', c => {
-    conn = c;
-    conn.on('open', () => {
-      appendMessage("✅ Stranger connected. Start chatting!");
-      messageInput.disabled = false;
-      sendBtn.disabled = false;
-    });
-    conn.on('data', data => appendMessage(data, false));
-  });
+  myPeer.on('connection',c=>{conn=c;conn.on('open',()=>{appendMessage("✅ Stranger connected. Start chatting!");chatInput.disabled=false;sendButton.disabled=false;});conn.on('data',data=>appendMessage(data,false));});
 }
 </script>
-
 </body>
 </html>
