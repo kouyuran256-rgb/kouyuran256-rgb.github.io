@@ -4,11 +4,18 @@
 <meta charset="UTF-8">
 <title>匿名随机 P2P 聊天</title>
 <style>
-  body { font-family: sans-serif; max-width: 600px; margin: 50px auto; }
-  #chatBox { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; margin-bottom: 10px; }
-  #messageInput { width: 80%; padding: 5px; }
-  #sendBtn { padding: 5px 10px; }
-  #startBtn { padding: 10px 20px; margin-bottom: 10px; }
+  body { font-family: 'Segoe UI', sans-serif; max-width: 600px; margin: 50px auto; background: #f4f4f9; }
+  h1 { text-align: center; color: #333; }
+  #startBtn { display: block; margin: 20px auto; padding: 10px 20px; background: #4f46e5; color: white; border: none; border-radius: 10px; cursor: pointer; }
+  #chatBox { border: 1px solid #ccc; border-radius: 10px; padding: 10px; height: 400px; overflow-y: auto; background: white; }
+  .message { display: flex; margin: 5px 0; align-items: flex-end; }
+  .message.me { justify-content: flex-end; }
+  .message .avatar { width: 30px; height: 30px; border-radius: 50%; background: #ccc; display: inline-block; margin: 0 5px; }
+  .message .bubble { max-width: 70%; padding: 8px 12px; border-radius: 15px; background: #e0e0e0; }
+  .message.me .bubble { background: #4f46e5; color: white; }
+  #inputContainer { display: flex; margin-top: 10px; }
+  #messageInput { flex: 1; padding: 8px; border-radius: 10px; border: 1px solid #ccc; }
+  #sendBtn { padding: 8px 15px; margin-left: 10px; border-radius: 10px; border: none; background: #4f46e5; color: white; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -18,106 +25,124 @@
 
 <div id="chatBox"></div>
 
-<input type="text" id="messageInput" placeholder="输入消息" disabled>
-<button id="sendBtn" disabled>发送</button>
+<div id="inputContainer">
+  <input type="text" id="messageInput" placeholder="输入消息" disabled>
+  <button id="sendBtn" disabled>发送</button>
+</div>
 
 <script type="module">
-  // Firebase SDK
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import Peer from "https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics.js";
 
-  // 🔑 你的 Firebase 配置
-  const firebaseConfig = {
-    apiKey: "AIzaSyAC9HWZx10dKzI1vy9gm5gWODmBYrdGUlM",
-    authDomain: "us256-33f2c.firebaseapp.com",
-    projectId: "us256-33f2c",
-    storageBucket: "us256-33f2c.firebasestorage.app",
-    messagingSenderId: "456338392274",
-    appId: "1:456338392274:web:74ee8577be6625b778990b",
-    measurementId: "G-F286QQYRY6"
-  };
+// 🔑 Firebase 配置
+const firebaseConfig = {
+  apiKey: "AIzaSyAC9HWZx10dKzI1vy9gm5gWODmBYrdGUlM",
+  authDomain: "us256-33f2c.firebaseapp.com",
+  projectId: "us256-33f2c",
+  storageBucket: "us256-33f2c.firebasestorage.app",
+  messagingSenderId: "456338392274",
+  appId: "1:456338392274:web:74ee8577be6625b778990b",
+  measurementId: "G-F286QQYRY6"
+};
 
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  const db = getFirestore(app);
-  const waitingUsersCol = collection(db, "waitingUsers");
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const db = getFirestore(app);
+const waitingUsersCol = collection(db, "waitingUsers");
 
-  // PeerJS
-  import Peer from "https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js";
+// PeerJS
+let myPeer = new Peer(undefined, { host: '0.peerjs.com', port: 443, path: '/' });
+let conn;
 
-  let myPeer = new Peer(undefined, {
-    host: '0.peerjs.com',
-    port: 443,
-    path: '/'
+const chatBox = document.getElementById('chatBox');
+const messageInput = document.getElementById('messageInput');
+const sendBtn = document.getElementById('sendBtn');
+const startBtn = document.getElementById('startBtn');
+
+// 随机颜色头像
+function randomColor() {
+  const colors = ['#F87171','#FBBF24','#34D399','#60A5FA','#A78BFA','#F472B6'];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+
+// 显示消息
+function appendMessage(msg, isMe=false){
+  const div = document.createElement('div');
+  div.classList.add('message');
+  if(isMe) div.classList.add('me');
+
+  const avatar = document.createElement('div');
+  avatar.className = 'avatar';
+  avatar.style.background = randomColor();
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.textContent = msg;
+
+  if(isMe){
+    div.appendChild(bubble);
+    div.appendChild(avatar);
+  } else {
+    div.appendChild(avatar);
+    div.appendChild(bubble);
+  }
+
+  chatBox.appendChild(div);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// 发送消息
+sendBtn.onclick = () => {
+  const msg = messageInput.value;
+  if(!msg || !conn || conn.open === false) return;
+  conn.send(msg);
+  appendMessage(msg, true);
+  messageInput.value = '';
+}
+
+// 开始随机聊天
+startBtn.onclick = async () => {
+  startBtn.disabled = true;
+  appendMessage("🔹 等待随机匹配...");
+
+  myPeer.on('open', async id => {
+    const myDoc = await addDoc(waitingUsersCol, { peerId: id });
+
+    onSnapshot(waitingUsersCol, snapshot => {
+      snapshot.docChanges().forEach(async change => {
+        if(change.type === "added" && change.doc.id !== myDoc.id){
+          const otherPeerId = change.doc.data().peerId;
+          appendMessage("🔹 匹配到对方，建立 P2P 连接...");
+          conn = myPeer.connect(otherPeerId);
+
+          conn.on('open', () => {
+            appendMessage("✅ 已连接对方，可以聊天了！");
+            messageInput.disabled = false;
+            sendBtn.disabled = false;
+          });
+
+          conn.on('data', data => appendMessage(data, false));
+
+          // 从等待池移除双方
+          deleteDoc(doc(db, "waitingUsers", change.doc.id));
+          deleteDoc(doc(db, "waitingUsers", myDoc.id));
+        }
+      });
+    });
   });
-  let conn;
 
-  const chatBox = document.getElementById('chatBox');
-  const messageInput = document.getElementById('messageInput');
-  const sendBtn = document.getElementById('sendBtn');
-  const startBtn = document.getElementById('startBtn');
-
-  function appendMessage(msg){
-    const div = document.createElement('div');
-    div.textContent = msg;
-    chatBox.appendChild(div);
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }
-
-  // 发送消息
-  sendBtn.onclick = () => {
-    const msg = messageInput.value;
-    if (!msg || !conn || conn.open === false) return;
-    conn.send(msg);
-    appendMessage("我: " + msg);
-    messageInput.value = '';
-  }
-
-  // 开始随机聊天
-  startBtn.onclick = async () => {
-    startBtn.disabled = true;
-    appendMessage("🔹 等待随机匹配...");
-
-    myPeer.on('open', async id => {
-      // 加入 Firebase 等待池
-      const myDoc = await addDoc(waitingUsersCol, { peerId: id });
-
-      // 监听数据库变化匹配其他用户
-      onSnapshot(waitingUsersCol, snapshot => {
-        snapshot.docChanges().forEach(async change => {
-          if(change.type === "added" && change.doc.id !== myDoc.id){
-            const otherPeerId = change.doc.data().peerId;
-            appendMessage("🔹 匹配到对方，建立 P2P 连接...");
-            conn = myPeer.connect(otherPeerId);
-
-            conn.on('open', () => {
-              appendMessage("✅ 已连接对方，可以聊天了！");
-              messageInput.disabled = false;
-              sendBtn.disabled = false;
-            });
-
-            conn.on('data', data => appendMessage("对方: " + data));
-
-            // 从等待池移除双方
-            deleteDoc(doc(db, "waitingUsers", change.doc.id));
-            deleteDoc(doc(db, "waitingUsers", myDoc.id));
-          }
-        });
-      });
+  myPeer.on('connection', c => {
+    conn = c;
+    conn.on('open', () => {
+      appendMessage("✅ 对方已连接，可以聊天了！");
+      messageInput.disabled = false;
+      sendBtn.disabled = false;
     });
-
-    // 被动接收连接
-    myPeer.on('connection', c => {
-      conn = c;
-      conn.on('open', () => {
-        appendMessage("✅ 对方已连接，可以聊天了！");
-        messageInput.disabled = false;
-        sendBtn.disabled = false;
-      });
-      conn.on('data', data => appendMessage("对方: " + data));
-    });
-  }
+    conn.on('data', data => appendMessage(data, false));
+  });
+}
 </script>
 </body>
 </html>
